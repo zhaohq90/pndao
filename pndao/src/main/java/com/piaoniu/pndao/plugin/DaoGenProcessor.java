@@ -24,10 +24,12 @@ import java.util.stream.Collectors;
 
 @SupportedAnnotationTypes("com.piaoniu.pndao.annotations.DaoGen")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedOptions(value = DaoGenProcessor.TABLE_PREFIX)
+//@SupportedOptions(value = DaoGenProcessor.TABLE_PREFIX)
+@SupportedOptions(value ={DaoGenProcessor.TABLE_PREFIX,DaoGenProcessor.MAPPER_LOCATION})
 public class DaoGenProcessor  extends AbstractProcessor {
     public static final String PATH = DaoGen.class.getCanonicalName();
     public static final String TABLE_PREFIX = "tablePrefix";
+    public static final String MAPPER_LOCATION = "mapperLocation";
 
     // 工具实例类，用于将CompilerAPI, CompilerTreeAPI和AnnotationProcessing框架粘合起来
     private Trees trees;
@@ -36,6 +38,7 @@ public class DaoGenProcessor  extends AbstractProcessor {
     private Filer filer;
     private DaoGenHelper daoGenHelper;
     private String tablePrefix;
+    private String mapperLocation;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -44,6 +47,7 @@ public class DaoGenProcessor  extends AbstractProcessor {
         this.messager = processingEnv.getMessager();
         this.filer = processingEnv.getFiler();
         this.tablePrefix = processingEnv.getOptions().get(TABLE_PREFIX);
+        this.mapperLocation = processingEnv.getOptions().get(MAPPER_LOCATION);
         Context context = ((JavacProcessingEnvironment) processingEnv).getContext();
         daoGenHelper = new DaoGenHelper(trees,context);
     }
@@ -59,7 +63,8 @@ public class DaoGenProcessor  extends AbstractProcessor {
 
 
     private void genXmlConfig(String pkg, String clz, Symbol.ClassSymbol classSymbol) {
-        ResourceHelper.doWithOriAndPrintWriter(filer,StandardLocation.CLASS_OUTPUT, pkg, clz + ".xml",
+        String location = this.mapperLocation.isEmpty() ? pkg : this.mapperLocation;
+        ResourceHelper.doWithOriAndPrintWriter(filer,StandardLocation.CLASS_OUTPUT, location, clz + ".xml",
                 (data, writer) -> {
                     String newXml = genNewXml(data, classSymbol);
                     writer.print(newXml);
