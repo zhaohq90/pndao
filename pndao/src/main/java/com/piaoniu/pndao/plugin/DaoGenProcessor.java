@@ -63,7 +63,7 @@ public class DaoGenProcessor  extends AbstractProcessor {
 
 
     private void genXmlConfig(String pkg, String clz, Symbol.ClassSymbol classSymbol) {
-        String location = this.mapperLocation.isEmpty() ? pkg : this.mapperLocation;
+        String location = mapperLocation!=null&&!mapperLocation.isEmpty() ? mapperLocation:pkg;
         ResourceHelper.doWithOriAndPrintWriter(filer,StandardLocation.CLASS_OUTPUT, location, clz + ".xml",
                 (data, writer) -> {
                     String newXml = genNewXml(data, classSymbol);

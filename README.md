@@ -123,6 +123,12 @@ public interface UserDao {
 		 <td>updateForUserName(String userName,int id)</td>        
         <td>返回更新记录数</td>
     </tr>
+     <tr>
+        <td>updateBy</td>
+        <td>按照某列更新其他所有列</td>
+         <td>updateByUserName(String userName,int id)</td>        
+        <td>返回更新记录数</td>
+    </tr>
 </table>
 
 ## 定制

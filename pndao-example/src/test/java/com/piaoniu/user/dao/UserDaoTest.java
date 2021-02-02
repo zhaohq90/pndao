@@ -20,7 +20,7 @@ public class UserDaoTest extends AbstractTest{
 	@Autowired
 	private UserDao userDao;
 
-	@Ignore("insert语句与h2不兼容")
+	//@Ignore("insert语句与h2不兼容")
 	@Test
 	public void testInsertUser() throws Exception {
 		User user = initUser();

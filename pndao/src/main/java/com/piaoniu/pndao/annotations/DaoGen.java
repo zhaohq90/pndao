@@ -31,7 +31,7 @@ public @interface DaoGen {
 
     String primaryKey() default "id";
 
-    String createTime() default "addTime";
+    String createTime() default "createTime";
 
     String updateTime() default "updateTime";
 

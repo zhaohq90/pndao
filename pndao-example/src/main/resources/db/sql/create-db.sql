@@ -1,9 +1,10 @@
-CREATE TABLE PN_User (
-  id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `userName` varchar(200) NOT NULL,
+CREATE TABLE `t_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
-  `mobileNo` varchar(200) NOT NULL,
-  `avatar` VARCHAR(255) NOT NULL ,
-  `AddTime` datetime NOT NULL,
-  `UpdateTime` datetime NOT NULL
-);
+  `mobile_no` varchar(200) NOT NULL,
+  `avatar` varchar(255) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

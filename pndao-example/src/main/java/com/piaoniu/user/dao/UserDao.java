@@ -20,4 +20,6 @@ public interface UserDao extends EntityDao<User> {
 
 	int updateForUserName(@Param("userName") String userName, @Param("id") int id);
 
+	int updateByUserName(User user);
+
 }

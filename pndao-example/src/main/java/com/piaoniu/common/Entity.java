@@ -18,6 +18,7 @@ public abstract class Entity implements Serializable {
 	private static final long serialVersionUID = -1L;
 
 	public int id;
-	Date addTime;
+	Date createTime;
 	Date updateTime;
+
 }

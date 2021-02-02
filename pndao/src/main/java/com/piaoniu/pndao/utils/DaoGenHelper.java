@@ -204,8 +204,8 @@ public class DaoGenHelper {
                                     !method.getDaoEnv().getCreateTime().equals(field)))
                                     .map((field -> {
                                         if (method.getDaoEnv().getUpdateTime().equals(field))
-                                            return "`" + field + "` = " + "now() ";
-                                        else return "`" + field + "` = " + "#{" + field + "} ";
+                                            return "`" + StrKit.humpToLine(field) + "` = " + "now() ";
+                                        else return "`" + StrKit.humpToLine(field) + "` = " + "#{" + field + "} ";
                                     }))
                                     .iterator()));
 
@@ -230,7 +230,7 @@ public class DaoGenHelper {
             StringBuilder select = new StringBuilder(50);
             List<String> fields = getFields(method.getReturnType());
             select.append("select ")
-                    .append(Joiner.on(", ").join(fields.stream().map(f-> "`" + f + "`").iterator()))
+                    .append(Joiner.on(", ").join(fields.stream().map(f-> "`" + StrKit.humpToLine(f) + "`").iterator()))
                     .append(" from ")
                     .append(method.getDaoEnv().getTableName());
             int len = params.size();
@@ -285,7 +285,7 @@ public class DaoGenHelper {
     private void appendParams(List<String> params, StringBuilder select, int len, int cur) {
         for (String param : params) {
             cur++;
-            String realParam = lowerFirst(param);
+            String realParam = StrKit.humpToLine(lowerFirst(param));
             select.append("`")
                     .append(realParam)
                     .append("`")
@@ -335,6 +335,9 @@ public class DaoGenHelper {
         if (!fieldsMap.containsKey(typeStr)) {
             List<Symbol.VarSymbol> varSymbols = getMember(Symbol.VarSymbol.class, ElementKind.FIELD, type);
             fieldsMap.put(typeStr, varSymbols.stream().filter(s->!s.isStatic()).map(Symbol.VarSymbol::toString).collect(Collectors.toList()));
+            //todo
+            //modify by zhaohq 数据库字段转换为下划线方式命名
+            //fieldsMap.put(typeStr, varSymbols.stream().filter(s->!s.isStatic()).map(Symbol.VarSymbol::toString).map(StrKit::humpToLine).collect(Collectors.toList()));
         }
         return fieldsMap.get(typeStr);
     }
@@ -409,7 +412,7 @@ public class DaoGenHelper {
             StringBuilder select = new StringBuilder(50);
             List<String> fields = getFields(method.getReturnType());
             select.append("select ")
-                    .append(Joiner.on(", ").join(fields.stream().map(f-> "`" + f + "`").iterator()))
+                    .append(Joiner.on(", ").join(fields.stream().map(f-> "`" + StrKit.humpToLine(f) + "`").iterator()))
                     .append(" from ")
                     .append(method.getDaoEnv().getTableName());
             int len = params.size();
@@ -468,16 +471,16 @@ public class DaoGenHelper {
                                     && !method.getDaoEnv().getCreateTime().equals(field)))
                                     .map((field -> {
                                         if (method.getDaoEnv().getUpdateTime().equals(field))
-                                            return "`" + field + "` = " + "now() ";
+                                            return "`" + StrKit.humpToLine(field) + "` = " + "now() ";
                                         else
-                                            return "`" + field + "` = " + "#{" + (entity != null ?
+                                            return "`" + StrKit.humpToLine(field) + "` = " + "#{" + (entity != null ?
                                                     entity + "." :
                                                     "") + field + "} ";
                                     }))
                                     .iterator()));
 
             updateSql.append("Where `")
-                    .append(updateByField)
+                    .append(StrKit.humpToLine(updateByField))
                     .append("` = ")
                     .append("#{")
                     .append(updateByField)
@@ -505,7 +508,7 @@ public class DaoGenHelper {
             String pk = daoGen.primaryKey();
             List<String> fields = getFields(method.getFirstParamType());
             insertSql.append("(")
-                    .append(Joiner.on(", ").join(getInsertFieldsStream(pk, fields).map(f -> "`"+f + "`").iterator()))
+                    .append(Joiner.on(", ").join(getInsertFieldsStream(pk, fields).map(f -> "`"+ StrKit.humpToLine(f) + "`").iterator())) //todo
                     .append(")\n");
 
             insertSql.append("values ");
@@ -540,7 +543,7 @@ public class DaoGenHelper {
             String pk = daoGen.primaryKey();
             List<String> fields = getFields(method.getFirstParamType());
             insertSql.append("(")
-                    .append(Joiner.on(", ").join(getInsertFieldsStream(pk, fields).map(f -> "`"+f + "`").iterator()))
+                    .append(Joiner.on(", ").join(getInsertFieldsStream(pk, fields).map(f -> "`"+ StrKit.humpToLine(f) + "`").iterator()))
                     .append(")\n");
 
             insertSql.append("values (");
@@ -567,4 +570,5 @@ public class DaoGenHelper {
     public static String getMethodName(Symbol.MethodSymbol methodSymbol) {
         return methodSymbol.getSimpleName().toString();
     }
+
 }

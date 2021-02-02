@@ -41,7 +41,8 @@ public class DaoEnv {
     }
 
     public String getTableName() {
-        return tableName;
+        //modify by zhaohq 表名改为小写
+        return tableName.toLowerCase();
     }
 
     public String getUpdateTime() {
